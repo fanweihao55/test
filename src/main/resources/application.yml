@@ -1,0 +1,26 @@
+server:
+  port: 8001
+  servlet:
+    context-path: /robot-vrp
+spring:
+  redis:
+    host: 127.0.0.1
+    timeout: 3000
+    port: 6379
+    password:
+    databaseIndex: 3
+
+    jedis:
+      pool:
+        max-active: 50
+        max-wait: 300
+        max-idle: 20
+        min-idle: 2
+  datasource:
+    url: jdbc:postgresql://39.105.176.118:5432/robot-vrp
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: postgres
+
+mybatis:
+  mapper-locations: classpath:/mapper/*Mapper.xml
