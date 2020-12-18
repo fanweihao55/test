@@ -123,12 +123,12 @@ public class TarmacSerciceImpl implements TarmacService {
         //修改之前先清除之前关联关系
         tarmacMapper.deleteTarmacIdAndTaskPointId(tarmacDto.getTarmacId());
         //添加新的关联关系
-        this.setTarmacAndTaskPoint(tarmacDto.getTarmacId(),tarmacDto.getTaskPointIds());
+        if (tarmacDto.getTaskPointIds()!=null&&tarmacDto.getTaskPointIds().length>0){
+            this.setTarmacAndTaskPoint(tarmacDto.getTarmacId(),tarmacDto.getTaskPointIds());
+        }
 
         //修改之前先清除之前关联关系
-        if (tarmacDto.getTaskPointIds()!=null&&tarmacDto.getTaskPointIds().length>0){
-            tarmacMapper.deleteTarmacIdAndUarId(tarmacDto.getTarmacId());
-        }
+        tarmacMapper.deleteTarmacIdAndUarId(tarmacDto.getTarmacId());
 
         //添加新的关联关系
         if (tarmacDto.getUarIds()!=null&&tarmacDto.getUarIds().length>0){
