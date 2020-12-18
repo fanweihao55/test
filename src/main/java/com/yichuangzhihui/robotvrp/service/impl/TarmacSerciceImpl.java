@@ -66,11 +66,11 @@ public class TarmacSerciceImpl implements TarmacService {
         tarmacMapper.insertSelective(ts);
         Tarmac tarmac1 = tarmacMapper.selectTarmacLat(tarmacDto.getTarmacName());
         //判断新增停机坪有没有添加任务点
-        if (tarmacDto.getTaskPointIds().length>0){
+        if (tarmacDto.getTaskPointIds()!=null&&tarmacDto.getTaskPointIds().length>0){
             this.setTarmacAndTaskPoint(tarmac1.getTarmacId(),tarmacDto.getTaskPointIds());
         }
         //判断新增停机坪有没有添加无人机
-        if (tarmacDto.getUarIds().length>0){
+        if (tarmacDto.getUarIds()!=null&&tarmacDto.getUarIds().length>0){
             this.setTarmacAndUar(tarmac1.getTarmacId(),tarmacDto.getUarIds());
         }
 
@@ -81,7 +81,7 @@ public class TarmacSerciceImpl implements TarmacService {
     @Transactional
     public void setTarmacAndTaskPoint(Long tarmacId, Long[] taskPointIds) {
         logger.info("setTarmacAndTaskPoint:: tarmacId="+tarmacId+"And taskPointIds[]="+taskPointIds);
-        if (taskPointIds.length>0){
+        if (taskPointIds!=null&&taskPointIds.length>0){
             for (Long taskPointId : taskPointIds) {
                 Map<String,Long> map = new HashMap<>();
                 map.put("tarmacId",tarmacId);
@@ -126,9 +126,16 @@ public class TarmacSerciceImpl implements TarmacService {
         this.setTarmacAndTaskPoint(tarmacDto.getTarmacId(),tarmacDto.getTaskPointIds());
 
         //修改之前先清除之前关联关系
-        tarmacMapper.deleteTarmacIdAndUarId(tarmacDto.getTarmacId());
+        if (tarmacDto.getTaskPointIds()!=null&&tarmacDto.getTaskPointIds().length>0){
+            tarmacMapper.deleteTarmacIdAndUarId(tarmacDto.getTarmacId());
+        }
+
         //添加新的关联关系
-        this.setTarmacAndUar(tarmacDto.getTarmacId(),tarmacDto.getUarIds());
+        if (tarmacDto.getUarIds()!=null&&tarmacDto.getUarIds().length>0){
+            this.setTarmacAndUar(tarmacDto.getTarmacId(),tarmacDto.getUarIds());
+        }
+
+
 
 
     }
@@ -248,7 +255,7 @@ public class TarmacSerciceImpl implements TarmacService {
     @Transactional
     public void setTarmacAndUar(Long tarmacId, Long[] uarIds) {
         logger.info("setTarmacAndTaskPoint:: tarmacId="+tarmacId+"And taskPointIds[]="+uarIds);
-        if (uarIds.length>0){
+        if (uarIds!=null&&uarIds.length>0){
             for (Long uarId : uarIds) {
                 Map<String,Long> map = new HashMap<>();
                 map.put("tarmacId",tarmacId);
