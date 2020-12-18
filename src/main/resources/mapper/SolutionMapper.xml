@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yichuangzhihui.robotvrp.mapper.SolutionMapper">
+  <resultMap id="BaseResultMap" type="com.yichuangzhihui.robotvrp.pojo.Solution">
+    <!--@mbg.generated-->
+    <!--@Table solution-->
+    <id column="solution_id" jdbcType="BIGINT" property="solutionId" />
+    <result column="tarmac_name" jdbcType="VARCHAR" property="tarmacName" />
+    <result column="create_date" jdbcType="DATE" property="createDate" />
+    <result column="update_date" jdbcType="DATE" property="updateDate" />
+    <result column="is_delete" jdbcType="BOOLEAN" property="isDelete" />
+    <result column="optimal_path" jdbcType="VARCHAR" property="optimalPath" />
+    <result column="tarmac_id" jdbcType="BIGINT" property="tarmacId" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    solution_id, tarmac_name, create_date, update_date, is_delete, optimal_path, tarmac_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from solution
+    where solution_id = #{solutionId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from solution
+    where solution_id = #{solutionId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yichuangzhihui.robotvrp.pojo.Solution">
+    <!--@mbg.generated-->
+    insert into solution (solution_id, tarmac_name, create_date,
+      update_date, is_delete, optimal_path,
+      tarmac_id)
+    values (#{solutionId,jdbcType=BIGINT}, #{tarmacName,jdbcType=VARCHAR}, #{createDate,jdbcType=DATE},
+      #{updateDate,jdbcType=DATE}, #{isDelete,jdbcType=BOOLEAN}, #{optimalPath,jdbcType=VARCHAR},
+      #{tarmacId,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Solution">
+    <!--@mbg.generated-->
+    insert into solution
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="solutionId != null">
+        solution_id,
+      </if>
+      <if test="tarmacName != null">
+        tarmac_name,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+      <if test="optimalPath != null">
+        optimal_path,
+      </if>
+      <if test="tarmacId != null">
+        tarmac_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="solutionId != null">
+        #{solutionId,jdbcType=BIGINT},
+      </if>
+      <if test="tarmacName != null">
+        #{tarmacName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=DATE},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BOOLEAN},
+      </if>
+      <if test="optimalPath != null">
+        #{optimalPath,jdbcType=VARCHAR},
+      </if>
+      <if test="tarmacId != null">
+        #{tarmacId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Solution">
+    <!--@mbg.generated-->
+    update solution
+    <set>
+      <if test="tarmacName != null">
+        tarmac_name = #{tarmacName,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=DATE},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=DATE},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BOOLEAN},
+      </if>
+      <if test="optimalPath != null">
+        optimal_path = #{optimalPath,jdbcType=VARCHAR},
+      </if>
+      <if test="tarmacId != null">
+        tarmac_id = #{tarmacId,jdbcType=BIGINT},
+      </if>
+    </set>
+    where solution_id = #{solutionId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yichuangzhihui.robotvrp.pojo.Solution">
+    <!--@mbg.generated-->
+    update solution
+    set tarmac_name = #{tarmacName,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=DATE},
+      update_date = #{updateDate,jdbcType=DATE},
+      is_delete = #{isDelete,jdbcType=BOOLEAN},
+      optimal_path = #{optimalPath,jdbcType=VARCHAR},
+      tarmac_id = #{tarmacId,jdbcType=BIGINT}
+    where solution_id = #{solutionId,jdbcType=BIGINT}
+  </update>
+  <select id="selectTarmac" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from solution
+    where tarmac_id = #{tarmacId,jdbcType=BIGINT}
+  </select>
+
+  <select id="findPathSoutionByTarmacId" parameterType="long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from solution
+    where tarmac_id = #{tarmacId}
+  </select>
+
+  <select id="selectAllPath" resultMap="BaseResultMap">
+    select * from solution
+  </select>
+</mapper>

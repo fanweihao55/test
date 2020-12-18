@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yichuangzhihui.robotvrp.mapper.UarMapper">
+  <resultMap id="BaseResultMap" type="com.yichuangzhihui.robotvrp.pojo.Uar">
+    <!--@mbg.generated-->
+    <!--@Table uar-->
+    <id column="uar_id" jdbcType="BIGINT" property="uarId" />
+    <result column="uar_name" jdbcType="VARCHAR" property="uarName" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="isdelete" jdbcType="BOOLEAN" property="isdelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    uar_id, uar_name, create_time, isdelete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from uar
+    where uar_id = #{uarId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from uar
+    where uar_id = #{uarId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yichuangzhihui.robotvrp.pojo.Uar">
+    <!--@mbg.generated-->
+    insert into uar (uar_id, uar_name, create_time,
+      isdelete)
+    values (#{uarId,jdbcType=BIGINT}, #{uarName,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{isdelete,jdbcType=BOOLEAN})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Uar">
+    <!--@mbg.generated-->
+    insert into uar
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uarId != null">
+        uar_id,
+      </if>
+      <if test="uarName != null">
+        uar_name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="isdelete != null">
+        isdelete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uarId != null">
+        #{uarId,jdbcType=BIGINT},
+      </if>
+      <if test="uarName != null">
+        #{uarName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        #{isdelete,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Uar">
+    <!--@mbg.generated-->
+    update uar
+    <set>
+      <if test="uarName != null">
+        uar_name = #{uarName,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isdelete != null">
+        isdelete = #{isdelete,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where uar_id = #{uarId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yichuangzhihui.robotvrp.pojo.Uar">
+    <!--@mbg.generated-->
+    update uar
+    set uar_name = #{uarName,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      isdelete = #{isdelete,jdbcType=BOOLEAN}
+    where uar_id = #{uarId,jdbcType=BIGINT}
+  </update>
+  <select id="getUAR" resultType="com.yichuangzhihui.robotvrp.pojo.Uar" parameterType="string">
+    select  <include refid="Base_Column_List" />
+    from uar where uar_name=#{name,jdbcType=VARCHAR}
+  </select>
+
+  <select id="selectAllUAR" resultMap="BaseResultMap">
+    select * from uar where isdelete=false
+  </select>
+
+  <delete id="delteUarIdAndTarmacID" parameterType="long">
+    delete from tarmac_ura where uar_id = #{uarid}
+  </delete>
+  <!--根据停机坪id查询关联的无人机集合-->
+  <select id="selectTarmacIdByUarList" parameterType="long" resultMap="BaseResultMap">
+    select * from uar where uar_id in(select uar_id from tarmac_ura where tarmac_id=#{tarmacId,jdbcType=BIGINT})
+  </select>
+</mapper>

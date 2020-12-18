@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yichuangzhihui.robotvrp.mapper.TarmacMapper">
+  <resultMap id="BaseResultMap" type="com.yichuangzhihui.robotvrp.pojo.Tarmac">
+    <!--@mbg.generated-->
+    <!--@Table tarmac-->
+    <id column="tarmac_id" jdbcType="BIGINT" property="tarmacId" />
+    <result column="tarmac_name" jdbcType="VARCHAR" property="tarmacName" />
+    <result column="tarmac_lng" jdbcType="NUMERIC" property="tarmacLng" />
+    <result column="tarmac_lat" jdbcType="NUMERIC" property="tarmacLat" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_delete" jdbcType="BOOLEAN" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    tarmac_id, tarmac_name, tarmac_lng, tarmac_lat, create_date, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from tarmac
+    where tarmac_id = #{tarmacId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from tarmac
+    where tarmac_id = #{tarmacId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yichuangzhihui.robotvrp.pojo.Tarmac">
+    <!--@mbg.generated-->
+    insert into tarmac (tarmac_id, tarmac_name, tarmac_lng,
+      tarmac_lat, create_date, is_delete
+      )
+    values (#{tarmacId,jdbcType=BIGINT}, #{tarmacName,jdbcType=VARCHAR}, #{tarmacLng,jdbcType=NUMERIC},
+      #{tarmacLat,jdbcType=NUMERIC}, #{createDate,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BOOLEAN}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Tarmac">
+    <!--@mbg.generated-->
+    insert into tarmac
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="tarmacId != null">
+        tarmac_id,
+      </if>
+      <if test="tarmacName != null">
+        tarmac_name,
+      </if>
+      <if test="tarmacLng != null">
+        tarmac_lng,
+      </if>
+      <if test="tarmacLat != null">
+        tarmac_lat,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="tarmacId != null">
+        #{tarmacId,jdbcType=BIGINT},
+      </if>
+      <if test="tarmacName != null">
+        #{tarmacName,jdbcType=VARCHAR},
+      </if>
+      <if test="tarmacLng != null">
+        #{tarmacLng,jdbcType=NUMERIC},
+      </if>
+      <if test="tarmacLat != null">
+        #{tarmacLat,jdbcType=NUMERIC},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yichuangzhihui.robotvrp.pojo.Tarmac">
+    <!--@mbg.generated-->
+    update tarmac
+    <set>
+      <if test="tarmacName != null">
+        tarmac_name = #{tarmacName,jdbcType=VARCHAR},
+      </if>
+      <if test="tarmacLng != null">
+        tarmac_lng = #{tarmacLng,jdbcType=NUMERIC},
+      </if>
+      <if test="tarmacLat != null">
+        tarmac_lat = #{tarmacLat,jdbcType=NUMERIC},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where tarmac_id = #{tarmacId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yichuangzhihui.robotvrp.pojo.Tarmac">
+    <!--@mbg.generated-->
+    update tarmac
+    set tarmac_name = #{tarmacName,jdbcType=VARCHAR},
+      tarmac_lng = #{tarmacLng,jdbcType=NUMERIC},
+      tarmac_lat = #{tarmacLat,jdbcType=NUMERIC},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BOOLEAN}
+    where tarmac_id = #{tarmacId,jdbcType=BIGINT}
+  </update>
+
+  <select id="selectAllTarmac" resultMap="BaseResultMap">
+    select * from  tarmac where is_delete=false
+  </select>
+
+  <select id="selectTarmacLat" parameterType="string" resultMap="BaseResultMap">
+        select  <include refid="Base_Column_List" />
+    from tarmac where tarmac_name=#{tarmacName,jdbcType=VARCHAR} and is_delete=false
+    </select>
+
+  <insert id="setTarmacAndTaskPoint" parameterType="map">
+    insert into tarmac_task_point(tarmac_id,task_point_id)
+    values (#{tarmacId},#{taskPointId})
+    </insert>
+
+  <delete id="deleteTarmacIdAndTaskPointId" parameterType="long">
+    delete from tarmac_task_point where tarmac_id = #{tarmacId}
+    </delete>
+
+  <delete id="deleteTarmacIdAndUarId" parameterType="long">
+    delete from tarmac_ura where tarmac_id = #{tarmacId}
+  </delete>
+
+  <delete id="setTarmacAndUar" parameterType="map">
+    insert into tarmac_ura(tarmac_id,uar_id)
+    values (#{tarmacId},#{uarId})
+  </delete>
+
+  <select id="findPointIdsByTarmacIdId" parameterType="long" resultType="java.lang.Long">
+    select task_point_id from tarmac_task_point where tarmac_id = #{tarmacId}
+    </select>
+
+  <select id="findUarIdsByTarmacIdId" parameterType="long" resultType="java.lang.Long">
+    select uar_id from tarmac_ura where tarmac_id = #{tarmacId}
+  </select>
+
+
+</mapper>

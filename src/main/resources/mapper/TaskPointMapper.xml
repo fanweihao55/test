@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yichuangzhihui.robotvrp.mapper.TaskPointMapper">
+  <resultMap id="BaseResultMap" type="com.yichuangzhihui.robotvrp.pojo.TaskPoint">
+    <!--@mbg.generated-->
+    <!--@Table task_point-->
+    <id column="task_point_id" jdbcType="BIGINT" property="taskPointId" />
+    <result column="task_point_name" jdbcType="VARCHAR" property="taskPointName" />
+    <result column="task_point_lng" jdbcType="NUMERIC" property="taskPointLng" />
+    <result column="task_point_lat" jdbcType="NUMERIC" property="taskPointLat" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="is_delete" jdbcType="BOOLEAN" property="isDelete" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    task_point_id, task_point_name, task_point_lng, task_point_lat, create_date, is_delete
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select
+    <include refid="Base_Column_List" />
+    from task_point
+    where task_point_id = #{taskPointId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    <!--@mbg.generated-->
+    delete from task_point
+    where task_point_id = #{taskPointId,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.yichuangzhihui.robotvrp.pojo.TaskPoint">
+    <!--@mbg.generated-->
+    insert into task_point (task_point_id, task_point_name, task_point_lng,
+      task_point_lat, create_date, is_delete
+      )
+    values (#{taskPointId,jdbcType=BIGINT}, #{taskPointName,jdbcType=VARCHAR}, #{taskPointLng,jdbcType=NUMERIC},
+      #{taskPointLat,jdbcType=NUMERIC}, #{createDate,jdbcType=TIMESTAMP}, #{isDelete,jdbcType=BOOLEAN}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yichuangzhihui.robotvrp.pojo.TaskPoint">
+    <!--@mbg.generated-->
+    insert into task_point
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="taskPointId != null">
+        task_point_id,
+      </if>
+      <if test="taskPointName != null">
+        task_point_name,
+      </if>
+      <if test="taskPointLng != null">
+        task_point_lng,
+      </if>
+      <if test="taskPointLat != null">
+        task_point_lat,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="isDelete != null">
+        is_delete,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="taskPointId != null">
+        #{taskPointId,jdbcType=BIGINT},
+      </if>
+      <if test="taskPointName != null">
+        #{taskPointName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskPointLng != null">
+        #{taskPointLng,jdbcType=NUMERIC},
+      </if>
+      <if test="taskPointLat != null">
+        #{taskPointLat,jdbcType=NUMERIC},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        #{isDelete,jdbcType=BOOLEAN},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yichuangzhihui.robotvrp.pojo.TaskPoint">
+    <!--@mbg.generated-->
+    update task_point
+    <set>
+      <if test="taskPointName != null">
+        task_point_name = #{taskPointName,jdbcType=VARCHAR},
+      </if>
+      <if test="taskPointLng != null">
+        task_point_lng = #{taskPointLng,jdbcType=NUMERIC},
+      </if>
+      <if test="taskPointLat != null">
+        task_point_lat = #{taskPointLat,jdbcType=NUMERIC},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="isDelete != null">
+        is_delete = #{isDelete,jdbcType=BOOLEAN},
+      </if>
+    </set>
+    where task_point_id = #{taskPointId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yichuangzhihui.robotvrp.pojo.TaskPoint">
+    <!--@mbg.generated-->
+    update task_point
+    set task_point_name = #{taskPointName,jdbcType=VARCHAR},
+      task_point_lng = #{taskPointLng,jdbcType=NUMERIC},
+      task_point_lat = #{taskPointLat,jdbcType=NUMERIC},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      is_delete = #{isDelete,jdbcType=BOOLEAN}
+    where task_point_id = #{taskPointId,jdbcType=BIGINT}
+  </update>
+    <select id="selectAllTaskPoint" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List" />
+      from task_point where is_delete=false
+    </select>
+
+  <select id="selectTaskPoint" parameterType="string" resultMap="BaseResultMap">
+    select * from task_point where task_point_name=#{taskPointName,jdbcType=VARCHAR}
+  </select>
+
+  <delete id="delteByTaskPointIdAndTarmacID" parameterType="long">
+    delete from tarmac_task_point where task_point_id = #{taskPointId}
+    </delete>
+
+  <select id="selectTarmacIdByPointList" parameterType="long" resultMap="BaseResultMap">
+      select <include refid="Base_Column_List" /> from task_point
+    where task_point_id in(select task_point_id from tarmac_task_point where tarmac_id=#{tarmacId,jdbcType=BIGINT})
+  </select>
+</mapper>
