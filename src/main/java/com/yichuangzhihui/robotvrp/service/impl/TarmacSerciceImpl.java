@@ -44,10 +44,13 @@ public class TarmacSerciceImpl implements TarmacService {
 
         Access.isNull(tarmacDto.getTarmacLat(),"纬度不能为空");
         Access.isNull(tarmacDto.getTarmacLng(),"经度不能为空");
-        //查询停机坪名称是否重复
-        Tarmac tarmac = tarmacMapper.selectTarmacLat(tarmacDto.getTarmacName());
-        if (tarmac!=null){
-            throw new ServiceException(201,"停机坪名称重复");
+
+        if (tarmacDto.getTarmacName()!=null){
+            //查询停机坪名称是否重复
+            Tarmac tarmac = tarmacMapper.selectTarmacLat(tarmacDto.getTarmacName());
+            if (tarmac!=null){
+                throw new ServiceException(201,"停机坪名称重复");
+            }
         }
 
         Tarmac ts=new Tarmac();

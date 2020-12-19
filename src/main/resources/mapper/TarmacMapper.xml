@@ -112,38 +112,38 @@
       is_delete = #{isDelete,jdbcType=BOOLEAN}
     where tarmac_id = #{tarmacId,jdbcType=BIGINT}
   </update>
-
+  <!--查询全部停机坪-->
   <select id="selectAllTarmac" resultMap="BaseResultMap">
     select * from  tarmac where is_delete=false
   </select>
-
+  <!--根据停机坪名称查询停机坪-->
   <select id="selectTarmacLat" parameterType="string" resultMap="BaseResultMap">
         select  <include refid="Base_Column_List" />
     from tarmac where tarmac_name=#{tarmacName,jdbcType=VARCHAR} and is_delete=false
     </select>
-
+  <!--添加停机坪与任务点关联关系-->
   <insert id="setTarmacAndTaskPoint" parameterType="map">
     insert into tarmac_task_point(tarmac_id,task_point_id)
     values (#{tarmacId},#{taskPointId})
     </insert>
-
+  <!--删除停机坪与任务点关联关系-->
   <delete id="deleteTarmacIdAndTaskPointId" parameterType="long">
     delete from tarmac_task_point where tarmac_id = #{tarmacId}
     </delete>
-
+  <!--删除停机坪与无人机关联关系-->
   <delete id="deleteTarmacIdAndUarId" parameterType="long">
     delete from tarmac_ura where tarmac_id = #{tarmacId}
   </delete>
-
+  <!--添加停机坪与无人机关联关系-->
   <delete id="setTarmacAndUar" parameterType="map">
     insert into tarmac_ura(tarmac_id,uar_id)
     values (#{tarmacId},#{uarId})
   </delete>
-
+  <!--根据任务点id查询关联的任务点id-->
   <select id="findPointIdsByTarmacIdId" parameterType="long" resultType="java.lang.Long">
     select task_point_id from tarmac_task_point where tarmac_id = #{tarmacId}
     </select>
-
+  <!--根据停机坪id查询关联的无人机id-->
   <select id="findUarIdsByTarmacIdId" parameterType="long" resultType="java.lang.Long">
     select uar_id from tarmac_ura where tarmac_id = #{tarmacId}
   </select>

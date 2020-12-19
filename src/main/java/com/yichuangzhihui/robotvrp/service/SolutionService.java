@@ -12,7 +12,7 @@ import java.util.List;
  */
 public interface SolutionService {
     //无人机路径解决第一种
-    List<String> pathSoutionOne(SolutionDto solutionDto);
+    String pathSoutionOne(SolutionDto solutionDto);
     //根据停机坪id查询关联的无人机id
     Solution findPathSoutionByTarmacId(long tarmacId);
     //查询全部的最优路径

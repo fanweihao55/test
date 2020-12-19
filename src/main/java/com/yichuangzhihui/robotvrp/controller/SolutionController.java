@@ -40,9 +40,10 @@ public class SolutionController {
     @ApiOperation("无人机路径解决")
     @PostMapping("pathSoutionOne")
     public Result pathSoutionOne(@RequestBody SolutionDto solutionDto){
-        List<String> list=solutionService.pathSoutionOne(solutionDto);
-        return new Result(list,"最优路径","0");
+        String path = solutionService.pathSoutionOne(solutionDto);
+        return new Result(path,"最优路径","0");
     }
+
 
     /**
      * 根据停机坪id查询出最优路径

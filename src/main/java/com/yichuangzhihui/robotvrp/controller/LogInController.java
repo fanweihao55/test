@@ -9,6 +9,7 @@ import com.yichuangzhihui.robotvrp.util.RedisUtils;
 import com.yichuangzhihui.robotvrp.util.Result;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -68,6 +69,18 @@ public class LogInController {
         return new Result("添加用户成功","0");
 
     }
+
+
+    @GetMapping("/selectUserOne/{id}")
+    @ApiOperation("根据id查询单个用户")
+    public Result selectUserOne(@PathVariable("id") long id){
+
+        Users users1=userService.selectUserOne(id);
+
+        return new Result("添加用户成功","0");
+
+    }
+
 
 
     /**

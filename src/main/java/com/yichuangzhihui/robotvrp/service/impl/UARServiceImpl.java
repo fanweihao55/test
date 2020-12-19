@@ -61,12 +61,13 @@ public class UARServiceImpl implements UARService {
     public void updateUAR(Uar uar) {
         logger.info("updateUAR begin uars::"+uar.toString());
 
-        Uar uar1 = uarMapper.getUAR(uar.getUarName());
+        if (uar.getUarName()!=null){
+            Uar uar1 = uarMapper.getUAR(uar.getUarName());
 
-        if (uar1!=null&&uar1.getUarId()!=uar.getUarId()){
-            throw new ServiceException(201,"无人机名称重复");
+            if (uar1!=null&&uar1.getUarId()!=uar.getUarId()){
+                throw new ServiceException(201,"无人机名称重复");
+            }
         }
-
         uarMapper.updateByPrimaryKey(uar);
     }
 

@@ -17,9 +17,9 @@ public interface TarmacMapper {
     int updateByPrimaryKeySelective(Tarmac record);
 
     int updateByPrimaryKey(Tarmac record);
-
+    //查询全部停机坪
     List<Tarmac> selectAllTarmac();
-
+    //根据停机坪名称查询停机坪
     Tarmac selectTarmacLat(String tarmacName);
     //添加停机坪与任务点关联关系
     void setTarmacAndTaskPoint(Map<String, Long> map);

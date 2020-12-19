@@ -22,9 +22,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -34,8 +35,7 @@ import java.util.Random;
  */
 @Service
 @Log4j2
-public class
-SolutionServiceImpl implements SolutionService {
+public class SolutionServiceImpl implements SolutionService {
     private Logger logger = LogManager.getLogger(SolutionServiceImpl.class.getName());
 
     //停机坪
@@ -54,17 +54,21 @@ SolutionServiceImpl implements SolutionService {
     //无人机路径解决方案
     @Override
     @Transactional
-    public List<String> pathSoutionOne(SolutionDto solutionDto) {
+    public String pathSoutionOne(SolutionDto solutionDto) {
         Random ran = new Random(151190);
         //判断停机坪id是否存在
         Access.isNull(solutionDto.getTarmacId(),"停机坪id不能为空");
         logger.info("pathSoutionOne 停机坪id:"+solutionDto.getTarmacId());
         //根据停机坪id查询出关联的任务点信息
         List<TaskPoint> taskPointList=taskPointMapper.selectTarmacIdByPointList(solutionDto.getTarmacId());
-        //创建节点数组 长度为任务点集合长度+1
-        Node[] nodes=new Node[taskPointList.size()+1];
         //将停机坪关联的任务点信息打印到日志中
         logger.info("停机坪关联的任务点信息长度 taskPointList:"+taskPointList.size());
+        //判断有没有关联的任务点信息 没有则抛出异常
+        if (taskPointList.size()==0){
+            throw new ServiceException(202,"停机坪没有关联的任务点信息");
+        }
+        //创建节点数组 长度为任务点集合长度+1
+        Node[] nodes=new Node[taskPointList.size()+1];
         //根据停机坪id查询出关联的无人机信息
         List<Uar> uarList=uarMapper.selectTarmacIdByUarList(solutionDto.getTarmacId());
         //判断停机坪是否有无人机存在 没有无人机则抛异常
@@ -84,19 +88,25 @@ SolutionServiceImpl implements SolutionService {
         //创建一个新的节点类 将节点类添加到集合第一位
         taskPointList.add(0,new TaskPoint());
         //从集合索引1开始将节点id,节点x轴,y轴传入到nodes节点数组中
+        //定义一个map
+        Map<String,Integer> map=new HashMap<>();
+        //将0坐标id传入map中
+        map.put("0",0);
         for (int i = 1; i < nodes.length; i++) {
-            nodes[i]=new Node(taskPointList.get(i).getTaskPointId().intValue()
+            nodes[i]=new Node(i
                     ,taskPointList.get(i).getTaskPointLng().doubleValue()
                     ,taskPointList.get(i).getTaskPointLat().doubleValue()
                     ,4+ran.nextInt(7));
+            //将节点数组的id 和数据库查询出的id存入map中 以节点id为可以 数据库id为value
+            map.put(Integer.toString(i),taskPointList.get(i).getTaskPointId().intValue());
         }
         //日志打印任务点节点数组
         logger.info("任务点节点数组长度  nodes"+nodes.length);
         //调用算法 返回结果
         VRP vrp=new VRP();
-
-        List<String> list = vrp.VrpSolution(taskPointList.size()-1, 1, nodes);
-
+        //调用算法 传入节点长度-1 nodes节点数组 和无人机数量
+        List<String> list = vrp.VrpSolution(taskPointList.size()-1, uarList.size(), nodes);
+        //判断返回的结果
         if (list.size()==0){
             throw new ServiceException(202,"没有适合的无人机路径方案");
         }
@@ -108,8 +118,31 @@ SolutionServiceImpl implements SolutionService {
                 path=list.get(i);
             }
         }
+        //判断得出最优路径之后 对最优路径进行切割取出每一位id然后与数据库id进行切换
+        String[] vehicle_s = path.split("Vehicle ");
+        //定义一个空的最优路径
+        String sout="";
+        //取出切换后的每一个路径信息 从索引1开始
+        for (int i = 1; i < vehicle_s.length; i++) {
+            //通过->进行二次截取
+            String[] split = vehicle_s[i].split("->");
+            //将截取的数组进行二次循环
+            for (int i1 = 0; i1 < split.length; i1++) {
+                if (i1==0){
+                    sout+=split[i1]+"->";
+                }else if (i1==split.length-1){
+                    sout+=split[i1];
+                }else {
+                    String id = split[i1];
+                    Integer integer = map.get(id);
+                    if (integer!=null){
+                        sout+=integer+"->";
+                    }
+                }
+            }
+        }
         //将最优的路径存入日志
-        logger.info("最优路径 path: "+path);
+        logger.info("最优路径 path: "+sout);
         //判断得到最优的路径 将最优路径保存到数据库
         //根据停机坪id查询路径方案
         Solution s=solutionMapper.selectTarmac(solutionDto.getTarmacId());
@@ -126,7 +159,7 @@ SolutionServiceImpl implements SolutionService {
         //停机坪名称
         solution.setTarmacName(tarmac.getTarmacName());
         //最优路径
-        solution.setOptimalPath(path);
+        solution.setOptimalPath(sout);
         //先判断数据库是否有此路径的方案 如果有则修改 没有直接添加
         if (s==null){
             //直接添加
@@ -138,15 +171,15 @@ SolutionServiceImpl implements SolutionService {
             solutionMapper.updateByPrimaryKeySelective(solution);
         }
         //将最优路径切割
-        List<String> stringList=new ArrayList<>();
-        String[] vehicles = path.split("Vehicle");
-        for (String vehicle : vehicles) {
-            if (vehicle.length()>0){
-                stringList.add(vehicle);
-            }
-        }
+        //List<String> stringList=new ArrayList<>();
+        //String[] vehicles = path.split("Vehicle");
+        //for (String vehicle : vehicles) {
+        //    if (vehicle.length()>0){
+        //        stringList.add(vehicle);
+        //    }
+        //}
         //返回最终结果
-        return stringList;
+        return sout;
 
     }
 
@@ -168,4 +201,5 @@ SolutionServiceImpl implements SolutionService {
     public List<Solution> selectAllPath() {
         return solutionMapper.selectAllPath();
     }
+
 }

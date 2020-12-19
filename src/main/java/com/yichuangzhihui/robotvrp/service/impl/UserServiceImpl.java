@@ -72,6 +72,10 @@ public class UserServiceImpl implements UserService {
         userMapper.insertSelective(users);
     }
 
+    /**
+     * 修改用户
+     * @param users
+     */
     @Transactional
     @Override
     public void updateUser(Users users) {
@@ -85,10 +89,25 @@ public class UserServiceImpl implements UserService {
         userMapper.updateByPrimaryKeySelective(users);
 
     }
+
+    /**
+     * 删除用户
+     * @param id
+     */
     @Transactional
     @Override
     public void deleteUser(long id) {
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 根据id查询用户
+     * @param id
+     * @return
+     */
+    @Override
+    public Users selectUserOne(long id) {
+        return userMapper.selectByPrimaryKey(id);
     }
 
 

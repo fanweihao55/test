@@ -9,13 +9,13 @@ import java.util.List;
  */
 public class VRP {
 
-    private static double EARTH_RADIUS = 6371393;
+    //private static double EARTH_RADIUS = 6371393;
 
     //noOfCustomers 目标 noOfVehicles无人机 nodes节点
     public  List<String> VrpSolution (int noOfCustomers, int noOfVehicles, Node[] nodes){
 
         List<String> list=new ArrayList<>();
-        int VehicleCap = 50; // 负载(无用)
+        int VehicleCap = 80; // 负载(无用)
         //Tabu Parameter
         // 邻域 (有用，不用调)
         int TABU_Horizon = 10;
@@ -98,9 +98,9 @@ public class VRP {
 
     }
 
-    private static double rad(double d) {
-        return d * Math.PI / 180.0;
-    }
+   //private static double rad(double d) {
+   //    return d * Math.PI / 180.0;
+   //}
 
 
 }
