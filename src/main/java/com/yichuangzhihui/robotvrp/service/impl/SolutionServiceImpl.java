@@ -87,11 +87,11 @@ public class SolutionServiceImpl implements SolutionService {
         nodes[0]=depot;
         //创建一个新的节点类 将节点类添加到集合第一位
         taskPointList.add(0,new TaskPoint());
-        //从集合索引1开始将节点id,节点x轴,y轴传入到nodes节点数组中
-        //定义一个map
+        //定义一个map key为节点id  value为数据库id
         Map<String,Integer> map=new HashMap<>();
         //将0坐标id传入map中
         map.put("0",0);
+        //从集合索引1开始将节点id,节点x轴,y轴传入到nodes节点数组中
         for (int i = 1; i < nodes.length; i++) {
             nodes[i]=new Node(i
                     ,taskPointList.get(i).getTaskPointLng().doubleValue()
@@ -170,15 +170,6 @@ public class SolutionServiceImpl implements SolutionService {
             //修改
             solutionMapper.updateByPrimaryKeySelective(solution);
         }
-        //将最优路径切割
-        //List<String> stringList=new ArrayList<>();
-        //String[] vehicles = path.split("Vehicle");
-        //for (String vehicle : vehicles) {
-        //    if (vehicle.length()>0){
-        //        stringList.add(vehicle);
-        //    }
-        //}
-        //返回最终结果
         return sout;
 
     }

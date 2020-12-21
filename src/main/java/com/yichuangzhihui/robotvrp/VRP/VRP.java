@@ -51,8 +51,11 @@ public class VRP {
         // 执行贪心方法 GreedySolution 装载参数
         // 参数1: 任务点坐标
         // 参数2: 距离矩阵
-         s.GreedySolution(nodes, distanceMatrix);
+        String s1 = s.GreedySolution(nodes, distanceMatrix);
 
+        if (!s1.equals("")){
+            return list;
+        }
         // 打印 贪心算法 结果
         String greedy_solution = s.SolutionPrint("Greedy Solution");
 
@@ -93,6 +96,7 @@ public class VRP {
         }
         // 画图
         //.drawRoutes(s, "TABU_Solution");
+
 
         return list;
 

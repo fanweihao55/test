@@ -63,8 +63,8 @@ public class Solution {
             return false;
         }
 
-        public void GreedySolution(Node[] Nodes , double[][] CostMatrix) {
-
+        public String GreedySolution(Node[] Nodes , double[][] CostMatrix) {
+        String s="";
         double CandCost,EndCost;
         int VehIndex = 0;
 
@@ -106,11 +106,12 @@ public class Solution {
                 }
                 else //We DO NOT have any more vehicle to assign. The problem is unsolved under these parameters
                 {
+                    s="其余客户无法容纳任何车辆在这些约束下无法解决问题";
 
                     System.out.println("\nThe rest customers do not fit in any Vehicle\n" +
                             "The problem cannot be resolved under these constrains");
-
-                    System.exit(0);
+                return s;
+                  //  System.exit(0);
                 }
             }
             else
@@ -124,7 +125,7 @@ public class Solution {
         EndCost = CostMatrix[Vehicles[VehIndex].CurLoc][0];
         Vehicles[VehIndex].AddNode(Nodes[0]);
         this.Cost +=  EndCost;
-
+    return s;
 
     }
 
