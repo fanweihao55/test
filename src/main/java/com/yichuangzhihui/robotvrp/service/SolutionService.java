@@ -17,5 +17,8 @@ public interface SolutionService {
     Solution findPathSoutionByTarmacId(long tarmacId);
     //查询全部的最优路径
     List<Solution> selectAllPath();
-
+    //根据id查询最优路径
+    Solution findPathSoutionBySolutionId(long solutionId);
+    //删除最优路径
+    void deletePath(long solutionId);
 }

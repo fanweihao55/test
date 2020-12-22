@@ -193,4 +193,24 @@ public class SolutionServiceImpl implements SolutionService {
         return solutionMapper.selectAllPath();
     }
 
+    /**
+     * 根据id查询最优路径
+     * @param solutionId
+     * @return
+     */
+    @Override
+    public Solution findPathSoutionBySolutionId(long solutionId) {
+        return solutionMapper.selectByPrimaryKey(solutionId);
+    }
+
+    /**
+     * 删除最优路径
+     * @param solutionId
+     */
+    @Override
+    @Transactional
+    public void deletePath(long solutionId) {
+        solutionMapper.deleteByPrimaryKey(solutionId);
+    }
+
 }

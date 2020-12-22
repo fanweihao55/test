@@ -62,6 +62,31 @@ public class SolutionController {
     }
 
     /**
+     * 根据id查询最优路径
+     * @param solutionId
+     * @return
+     */
+    @ApiModelProperty("根据id查询最优路径")
+    @GetMapping("findPathSoutionBySolutionId/{solutionId}")
+    public Result findPathSoutionBySolutionId(@PathVariable("solutionId") long solutionId){
+        Solution solution = solutionService.findPathSoutionBySolutionId(solutionId);
+        if (solution!=null){
+            return new Result(solution,"查询最优路径完成","0");
+        }else {
+            return new Result("此停机坪没有最优路径","0");
+        }
+    }
+
+
+    @ApiModelProperty("根据id删除最优路径")
+    @GetMapping("deletePath/{solutionId}")
+    public Result deletePath(@PathVariable("solutionId") long solutionId){
+        solutionService.deletePath(solutionId);
+        return new Result("删除最优路径成功","0");
+
+    }
+
+    /**
      * 查询全部的最优路径
      * @return
      */
