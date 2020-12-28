@@ -97,7 +97,7 @@ public class SolutionServiceImpl implements SolutionService {
                     ,taskPointList.get(i).getTaskPointLng().doubleValue()
                     ,taskPointList.get(i).getTaskPointLat().doubleValue()
                     ,4+ran.nextInt(7));
-            //将节点数组的id 和数据库查询出的id存入map中 以节点id为可以 数据库id为value
+            //将节点数组的id 和数据库查询出的id存入map中 以节点id为key 数据库id为value
             map.put(Integer.toString(i),taskPointList.get(i).getTaskPointId().intValue());
         }
         //日志打印任务点节点数组
@@ -118,6 +118,8 @@ public class SolutionServiceImpl implements SolutionService {
                 path = list.get(i);
             }
         }
+        //将最优路径打印到日志中
+        logger.info("判断得出的最优路径为:"+path);
         //判断得出最优路径之后 对最优路径进行切割取出每一位id然后与数据库id进行切换
         String[] vehicle_s = path.split("Vehicle ");
         //定义一个空的最优路径
@@ -146,7 +148,7 @@ public class SolutionServiceImpl implements SolutionService {
             }
         }
         //将最优的路径存入日志
-        logger.info("最优路径 path: "+sout);
+        logger.info("切割后的最优路径 path: "+sout);
         //判断得到最优的路径 将最优路径保存到数据库
         //根据停机坪id查询路径方案
         Solution s = solutionMapper.selectTarmac(solutionDto.getTarmacId());
