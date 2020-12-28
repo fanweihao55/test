@@ -125,7 +125,7 @@ public class TarmacController {
 
         tarmacService.addTarmacIdAndTaskPointId(tarmacDto);
 
-        return new Result("任务点更新完成","0");
+        return new Result("停机坪任更新任务点完成","0");
     }
 
     /**
@@ -136,7 +136,7 @@ public class TarmacController {
     @PostMapping("addTarmacIdAndUarId")
     public Result addTarmacIdAndUarId(@RequestBody TarmacDto tarmacDto){
         tarmacService.addTarmacIdAndUarId(tarmacDto);
-        return new Result("任务点更新完成","0");
+        return new Result("停机坪更新无人机完成","0");
     }
 
 

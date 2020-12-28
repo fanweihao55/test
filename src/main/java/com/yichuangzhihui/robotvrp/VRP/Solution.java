@@ -9,61 +9,45 @@ import java.util.Random;
  * @Author : fanweihao
  * @Version: V1.0
  */
-public class Solution {
+public class Solution{
+    int VehicleNum;
+    int TargetNum;
+    Vehicle[] Vehicles;
+    double Cost;
 
+    //Tabu Variables
+    public Vehicle[] VehiclesForBestSolution;
+    double BestSolutionCost;
 
-        //车辆数量
-        int NoOfVehicles;
-        //客户人数
-        int NoOfCustomers;
-        //车辆数组
-        Vehicle[] Vehicles;
-        //成本
-        double Cost;
+    public ArrayList<Double> PastSolutions;
 
-        //Tabu Variables 禁忌变数？
+    Solution(int CustNum, int VechNum , int VechCap)
+    {
+        this.VehicleNum = VechNum;
+        this.TargetNum = CustNum;
+        this.Cost = 0;
+        Vehicles = new Vehicle[VehicleNum];
+        VehiclesForBestSolution =  new Vehicle[VehicleNum];
+        PastSolutions = new ArrayList<>();
 
-        //最佳解决方案的车辆
-        public Vehicle[] VehiclesForBestSolution;
-        //最佳解决方案的成本
-        double BestSolutionCost;
-        //过去的解决方案
-        public ArrayList<Double> PastSolutions;
-
-        Solution(int CustNum, int VechNum , int VechCap)
+        for (int i = 0 ; i < VehicleNum; i++)
         {
-            //车辆数量 10
-            this.NoOfVehicles = VechNum;
-            //客户人数 30
-            this.NoOfCustomers = CustNum;
-            //成本
-            this.Cost = 0;
-            //车辆数组   大小为车辆的数量
-            Vehicles = new Vehicle[NoOfVehicles];
-            //最佳解决方案的成本      等于车辆数组
-            VehiclesForBestSolution =  new Vehicle[NoOfVehicles];
-            //过去的解决方案
-            PastSolutions = new ArrayList<>();
-
-            for (int i = 0 ; i < NoOfVehicles; i++)
-            {
-                //将节点id 车帽？不懂啥意思
-                Vehicles[i] = new Vehicle(i+1,VechCap);
-                VehiclesForBestSolution[i] = new Vehicle(i+1,VechCap);
-            }
+            Vehicles[i] = new Vehicle(i+1,VechCap);
+            VehiclesForBestSolution[i] = new Vehicle(i+1,VechCap);
         }
+    }
 
-        public boolean UnassignedCustomerExists(Node[] Nodes)
+    public boolean UnassignedCustomerExists(Node[] Nodes)
+    {
+        for (int i = 1; i < Nodes.length; i++)
         {
-            for (int i = 1; i < Nodes.length; i++)
-            {
-                if (!Nodes[i].IsRouted)
-                    return true;
-            }
-            return false;
+            if (!Nodes[i].IsRouted)
+                return true;
         }
+        return false;
+    }
 
-        public String GreedySolution(Node[] Nodes , double[][] CostMatrix) {
+    public String GreedySolution(Node[] Nodes , double[][] CostMatrix) {
         String s="";
         double CandCost,EndCost;
         int VehIndex = 0;
@@ -79,7 +63,7 @@ public class Solution {
                 Vehicles[VehIndex].AddNode(Nodes[0]);
             }
 
-            for (int i = 1; i <= NoOfCustomers; i++) {
+            for (int i = 1; i <= TargetNum; i++) {
                 if (Nodes[i].IsRouted == false) {
                     if (Vehicles[VehIndex].CheckIfFits(Nodes[i].demand)) {
                         CandCost = CostMatrix[Vehicles[VehIndex].CurLoc][i];
@@ -105,13 +89,12 @@ public class Solution {
                     VehIndex = VehIndex+1; //Go to next Vehicle
                 }
                 else //We DO NOT have any more vehicle to assign. The problem is unsolved under these parameters
-                {
-                    s="其余客户无法容纳任何车辆在这些约束下无法解决问题";
+                {  s="其余客户无法容纳任何车辆在这些约束下无法解决问题";
 
                     System.out.println("\nThe rest customers do not fit in any Vehicle\n" +
                             "The problem cannot be resolved under these constrains");
-                return s;
-                  //  System.exit(0);
+                    return s;
+                    // System.exit(0);
                 }
             }
             else
@@ -125,12 +108,11 @@ public class Solution {
         EndCost = CostMatrix[Vehicles[VehIndex].CurLoc][0];
         Vehicles[VehIndex].AddNode(Nodes[0]);
         this.Cost +=  EndCost;
-    return s;
-
+        return s;
     }
 
 
-        public void TabuSearch(int TABU_Horizon, double[][] CostMatrix) {
+    public void TabuSearch(int TABU_Horizon, double[][] CostMatrix) {
 
         //We use 1-0 exchange move
         ArrayList<Node> RouteFrom;
@@ -285,25 +267,25 @@ public class Solution {
         } catch (Exception e) {}
     }
 
-        public void SaveBestSolution()
+    public void SaveBestSolution()
+    {
+        BestSolutionCost = Cost;
+        for (int j=0 ; j < VehicleNum ; j++)
         {
-            BestSolutionCost = Cost;
-            for (int j=0 ; j < NoOfVehicles ; j++)
+            VehiclesForBestSolution[j].Route.clear();
+            if (! Vehicles[j].Route.isEmpty())
             {
-                VehiclesForBestSolution[j].Route.clear();
-                if (! Vehicles[j].Route.isEmpty())
-                {
-                    int RoutSize = Vehicles[j].Route.size();
-                    for (int k = 0; k < RoutSize ; k++) {
-                        Node n = Vehicles[j].Route.get(k);
-                        VehiclesForBestSolution[j].Route.add(n);
-                    }
+                int RoutSize = Vehicles[j].Route.size();
+                for (int k = 0; k < RoutSize ; k++) {
+                    Node n = Vehicles[j].Route.get(k);
+                    VehiclesForBestSolution[j].Route.add(n);
                 }
             }
         }
+    }
 
 
-        public void InterRouteLocalSearch(Node[] Nodes, double[][] CostMatrix) {
+    public void InterRouteLocalSearch(Node[] Nodes,  double[][] CostMatrix) {
 
         //We use 1-0 exchange move
         ArrayList<Node> RouteFrom;
@@ -419,7 +401,7 @@ public class Solution {
         } catch (Exception e) {}
     }
 
-        public void IntraRouteLocalSearch(Node[] Nodes, double[][] CostMatrix) {
+    public void IntraRouteLocalSearch(Node[] Nodes,  double[][] CostMatrix) {
 
         //We use 1-0 exchange move
         ArrayList<Node> rt;
@@ -506,40 +488,38 @@ public class Solution {
         } catch (Exception e) {}
     }
 
-        public String SolutionPrint(String Solution_Label)//Print Solution In console
+    public String SolutionPrint(String Solution_Label)//Print Solution In console
+    {
+        System.out.println("=========================================================");
+        System.out.println(Solution_Label+"\n");
+        String s ="";
+        for (int j=0 ; j < VehicleNum ; j++)
         {
-            System.out.println("=========================================================");
-            System.out.println(Solution_Label+"\n");
-            String s ="";
-            for (int j=0 ; j < NoOfVehicles ; j++)
-            {
+            if (! Vehicles[j].Route.isEmpty())
+            {   System.out.print("Vehicle " + j + ":");
+                s+="Vehicle "+j+":";
+                int RoutSize = Vehicles[j].Route.size();
+                for (int k = 0; k < RoutSize ; k++) {
+                    if (k == RoutSize-1)
+                    {
+                        int i = Vehicles[j].Route.get(k).NodeId;
+                        s+=String.valueOf(i);
+                        System.out.print(Vehicles[j].Route.get(k).NodeId );  }
+                    else
+                    {
 
-                if (! Vehicles[j].Route.isEmpty()) {
-                    System.out.print("Vehicle " + j + ":");
-                    s+="Vehicle "+j+":";
-                    int RoutSize = Vehicles[j].Route.size();
-                    for (int k = 0; k < RoutSize ; k++) {
-                        if (k == RoutSize-1) {
-                            int i = Vehicles[j].Route.get(k).NodeId;
-                            s+=String.valueOf(i);
-
-                            System.out.print(Vehicles[j].Route.get(k).NodeId );
-                        }
-                        else
-                        {
-                            int nodeId = Vehicles[j].Route.get(k).NodeId;
-                            String s1 = String.valueOf(nodeId);
-                            s+=s1+"->";
-
-                            System.out.print(Vehicles[j].Route.get(k).NodeId+ "->"); }
-                    }
-                    System.out.println();
+                        int nodeId = Vehicles[j].Route.get(k).NodeId;
+                        String s1 = String.valueOf(nodeId);
+                        s+=s1+"->";
+                        System.out.print(Vehicles[j].Route.get(k).NodeId+ "->"); }
                 }
+                System.out.println();
             }
-            //System.out.println("\nSolution Cost "+this.Cost+"\n");
-            return s;
         }
+        return s;
+        // System.out.println("\nSolution Cost "+this.Cost+"\n");
     }
+}
 
 
 

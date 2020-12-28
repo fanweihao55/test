@@ -41,6 +41,10 @@ public class TarmacSerciceImpl implements TarmacService {
     @Transactional
     public void addTarmac(TarmacDto tarmacDto) {
         logger.info("addTarmac begin tarmac::"+tarmacDto.toString());
+           // color scheme  配色方案
+        // code style scheme 代码样式方案
+        // view mode 查看模式
+        // look and feel 外观和感觉
 
         Access.isNull(tarmacDto.getTarmacLat(),"纬度不能为空");
         Access.isNull(tarmacDto.getTarmacLng(),"经度不能为空");
@@ -53,7 +57,7 @@ public class TarmacSerciceImpl implements TarmacService {
             }
         }
 
-        Tarmac ts=new Tarmac();
+        Tarmac ts= new Tarmac();
 
         //名称
         ts.setTarmacName(tarmacDto.getTarmacName());
